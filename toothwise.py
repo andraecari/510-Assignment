@@ -1,8 +1,7 @@
 import oracledb
 import tkinter as tk
 import tkinter.messagebox as messagebox
-from tkinter import ttk
-from tkinter import PhotoImage
+from tkinter import ttk, Label, PhotoImage
 import datetime
 import config
 
@@ -165,8 +164,25 @@ def main():
     r = tk.Tk()
     r.title("ToothWise")
 
-    icon = PhotoImage(file="tooth.png") 
-    r.iconphoto(True, icon)
+    # Load the image (ensure the file path is correct)
+    logo = PhotoImage(file="toothwise.png")
+
+    # Create a frame to hold the logo and text
+    header_frame = tk.Frame(r)
+    header_frame.pack(pady=20)  # Add some padding above the header
+
+    # Add the logo to the header
+    logo_label = Label(header_frame, image=logo)
+    logo_label.grid(row=0, column=0, padx=10)  # Add padding between image and text
+
+    # Add the text next to the logo
+    text_label = Label(header_frame, text="ToothWise", font=("Arial", 24))
+    text_label.grid(row=0, column=1)
+
+    # Keep the reference to the image to prevent garbage collection
+    logo_label.image = logo
+
+    r.iconphoto(True, logo)
 
     # Create a frame for the first row of buttons
     button_frame = ttk.Frame(r, padding="10")
