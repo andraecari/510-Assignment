@@ -22,7 +22,7 @@ def read_sql(path):
         return []
 
 # Function to update query_string based on selected radio button
-def update_query_string(selection):
+def update_query_string(radio_var, *args):
     global query_string
     query_strings = {
         "Patients": "SELECT * FROM patients",
@@ -30,8 +30,16 @@ def update_query_string(selection):
         "Appointments": "SELECT * FROM appointments",
         "Billing": "SELECT * FROM billing",
         "Medical History": "SELECT * FROM medical_history",
-        "Inventory": "SELECT * FROM inventory"
+        "Inventory": "SELECT * FROM inventory",
+        "Appointment #1": "SELECT * FROM patients",
+        "Appointment #2": "SELECT * FROM patients",
+        "Appointment #3": "SELECT * FROM patients",
+        "Medical History #1": "SELECT * FROM patients",
+        "Medical History #2": "SELECT * FROM patients",
+        "Medical History #3": "SELECT * FROM patients",
+        "Medical History #4": "SELECT * FROM patients",
     }
+    selection = radio_var.get()  # Get the currently selected value
     query_string = query_strings.get(selection, "")
     print(f"Query string updated to: {query_string}")  # For debugging
 
@@ -164,31 +172,33 @@ def main():
     r = tk.Tk()
     r.title("ToothWise")
 
-    # Load the image (ensure the file path is correct)
+    # Main Image
     logo = PhotoImage(file="toothwise.png")
 
-    # Create a frame to hold the logo and text
+    # Header
     header_frame = tk.Frame(r)
-    header_frame.pack(pady=20)  # Add some padding above the header
-
-    # Add the logo to the header
+    header_frame.pack(pady=20)  
     logo_label = Label(header_frame, image=logo)
-    logo_label.grid(row=0, column=0, padx=10)  # Add padding between image and text
-
-    # Add the text next to the logo
+    logo_label.grid(row=0, column=0, padx=10) 
     text_label = Label(header_frame, text="ToothWise", font=("Arial", 24))
     text_label.grid(row=0, column=1)
 
-    # Keep the reference to the image to prevent garbage collection
+    # App Icon
     logo_label.image = logo
-
     r.iconphoto(True, logo)
 
-    # Create a frame for the first row of buttons
+    # Different Frame Sections
     button_frame = ttk.Frame(r, padding="10")
     button_frame.pack(side="top", fill="x")
+    query_frame = ttk.Frame(r, padding="10")
+    query_frame.pack(side="top", fill="x")
+    radio_frame = ttk.Frame(query_frame)
+    radio_frame.pack()
+    appointments_frame = ttk.Frame(r, padding="10")
+    appointments_frame.pack()
+    medical_history_frame = ttk.Frame(r, padding="10")
+    medical_history_frame.pack()
 
-    # Add buttons to the first row
     create_button = ttk.Button(button_frame, text="Create Tables", command=create_tables)
     create_button.pack(side="left", padx=5)
 
@@ -198,35 +208,48 @@ def main():
     drop_button = ttk.Button(button_frame, text="Drop Tables", command=drop_tables)
     drop_button.pack(side="left", padx=5)
 
-    # Exit button with command to execute cleanup and exit
     exit_button = ttk.Button(button_frame, text="Exit", command=on_exit)
     exit_button.pack(side="left", padx=5)
 
-    # Create a frame for the second row (radio buttons and Query button)
-    query_frame = ttk.Frame(r, padding="10")
-    query_frame.pack(side="top", fill="x")
+    # Share variable for all radio buttons
+    radio_var = tk.StringVar()
+    radio_var.set("Patients")  # Default selection
+    radio_var.trace_add("write", lambda *args: update_query_string(radio_var, *args))
 
-    # Variable to hold the selected radio button value
-    selected_table = tk.StringVar()
-    selected_table.set("Patients")  # Default selection
-    query_string = "SELECT * FROM patients"  # Initialize to default query
-
-    # Add radio buttons for table selection
+    # Original Radio Buttons
     radio_options = ["Patients", "Employees", "Appointments", "Billing", "Medical History", "Inventory"]
     for option in radio_options:
         ttk.Radiobutton(
-            query_frame,
+            radio_frame,
             text=option,
-            variable=selected_table,
+            variable=radio_var,
             value=option,
-            command=lambda option=option: update_query_string(option)  # Update query_string on selection
         ).pack(side="left", padx=5)
 
-    # Add "Query" button to the right of the radio buttons
-    query_button = ttk.Button(query_frame, text="Query", command=execute_query)
-    query_button.pack(side="right", padx=5)
+    # Appointments Normalized Section
+    ttk.Label(appointments_frame, text="Appointments Normalized", font=("Arial", 12)).pack(pady=5)
+    appointments_radio_frame = ttk.Frame(appointments_frame)
+    appointments_radio_frame.pack()
+    appointment_options = ["Appointment #1", "Appointment #2", "Appointment #3"]
+    for option in appointment_options:
+        ttk.Radiobutton(appointments_radio_frame, text=option, variable=radio_var, value=option).pack(
+            side="left", padx=5
+        )
 
-    # Create a frame for the Treeview (initially empty)
+    # Medical History Normalized Section
+    ttk.Label(medical_history_frame, text="Medical History Normalized", font=("Arial", 12)).pack(pady=5)
+    medical_history_radio_frame = ttk.Frame(medical_history_frame)
+    medical_history_radio_frame.pack()
+    medical_history_options = ["Medical History #1", "Medical History #2", "Medical History #3", "Medical History #4"]
+    for option in medical_history_options:
+        ttk.Radiobutton(medical_history_radio_frame, text=option, variable=radio_var, value=option).pack(
+            side="left", padx=5
+        )
+
+    # Query Button
+    ttk.Button(medical_history_frame, text="Query", command=execute_query).pack(pady=10)
+
+    # Create a frame for the Treeview (QUERIES)
     tree_frame = ttk.Frame(r, padding="10", width=800, height=400)  # Reserve space for Treeview
     tree_frame.pack(side="top", fill="both", expand=True)
 
