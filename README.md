@@ -1,8 +1,8 @@
 # ToothWise
 An Efficient Dental Clinic Data and Appointment Management System.
-
 > By Vivian Fang and Andrae Cari
 
+![image](https://github.com/user-attachments/assets/e9549bf7-8af1-49ea-a9f1-e52faf97bed8)
 ## Prerequisites
 
 1. **Python Version**:
