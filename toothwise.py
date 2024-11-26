@@ -50,6 +50,8 @@ def execute_query():
     # Clear any existing Treeview
     for widget in tree_frame.winfo_children():
         widget.destroy()
+    
+    search = search_bar_var.get()
 
     tree_frame.pack_propagate(False)  # Prevent the frame from resizing with its contents
     tree_frame.config(height=400)  # Explicitly set the height
@@ -86,8 +88,13 @@ def execute_query():
 
         # Insert data into the Treeview
         for row in data:
-            values = [row[column] for column in columns]
-            tree.insert("", "end", values=values)
+            if search != "":
+                if any(search in str(row[column]) for column in columns):
+                    values = [row[column] for column in columns]
+                    tree.insert("", "end", values=values)
+            else:
+                values = [row[column] for column in columns]
+                tree.insert("", "end", values=values)
 
         # Add the Treeview to the frame
         tree.pack(fill="both", expand=True)
@@ -158,7 +165,8 @@ def on_exit():
         r.quit()
 
 def main():
-    global r, tree_frame, cursor, connection, query_string
+    global r, tree_frame, cursor, connection, query_string, search_bar_var
+    query_string = "SELECT * from patients"
 
     # Database connection details. Make a config.py file or hardcode these in.
     username = config.USERNAME
@@ -244,8 +252,16 @@ def main():
             side="left", padx=5
         )
 
-    # Query Button
-    ttk.Button(medical_history_frame, text="Query", command=execute_query).pack(pady=10)
+    # Query Button and Search Bar
+    query_frame = ttk.Frame(medical_history_frame)
+    query_frame.pack(pady=10)
+
+    search_bar_var = tk.StringVar()
+
+    search_bar = ttk.Entry(query_frame, textvariable=search_bar_var, width=30)
+    search_bar.pack(side="left", padx=5)
+
+    ttk.Button(query_frame, text="Query", command=execute_query).pack(side="left", padx=5)
 
     # Create a frame for the Treeview (QUERIES)
     tree_frame = ttk.Frame(r, padding="10", width=800, height=400)  # Reserve space for Treeview
