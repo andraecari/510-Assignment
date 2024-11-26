@@ -2,6 +2,7 @@ import oracledb
 import tkinter as tk
 import tkinter.messagebox as messagebox
 from tkinter import ttk
+from tkinter import PhotoImage
 import datetime
 import config
 
@@ -162,7 +163,10 @@ def main():
 
     # Create the main window
     r = tk.Tk()
-    r.title("TESTING")
+    r.title("ToothWise")
+
+    icon = PhotoImage(file="tooth.png") 
+    r.iconphoto(True, icon)
 
     # Create a frame for the first row of buttons
     button_frame = ttk.Frame(r, padding="10")
