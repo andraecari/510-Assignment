@@ -1,13 +1,12 @@
 # ToothWise
 An Efficient Dental Clinic Data and Appointment Management System.
 
-- Vivian Fang 
-- Andrae Cari
+> By Vivian Fang and Andrae Cari
 
 ## Prerequisites
 
 1. **Python Version**:
-   - Ensure you are using Python **3.12** or greater.
+   - Make sure you are using Python **3.12** or greater.
 
 2. **Install Required Packages**:
    - Install the `oracledb` package:
