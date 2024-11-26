@@ -87,7 +87,7 @@ def execute_query():
         print("Treeview updated with new query results.")
     except Exception as e:
         if "ORA-00942: table or view does not exist" in str(e):
-            messagebox.showinfo("Ok", "Table does not exist. Please press Create Tables.")
+            messagebox.showinfo("Ok", "Tables do not exist. Please click Create Tables.")
         print(f"Error executing query: {e}")
 
 # Function to drop tables
@@ -130,7 +130,7 @@ def populate_tables():
         print("Tables populated successfully.")
     except Exception as e:
         if "ORA-00001: unique constraint" in str(e):
-            messagebox.showinfo("Ok", "Tables already exist.")
+            messagebox.showinfo("Ok", "Data already exist.")
         print(f"Error creating tables: {e}")
 
 # Function to handle cleanup when exiting
