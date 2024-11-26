@@ -99,6 +99,8 @@ def execute_query():
         # Add the Treeview to the frame
         tree.pack(fill="both", expand=True)
 
+        if search != "":
+            print(f"Filtering Data with '{search}'")
         print("Treeview updated with new query results.")
     except Exception as e:
         if "ORA-00942: table or view does not exist" in str(e):
