@@ -190,9 +190,7 @@ def main():
     # Different Frame Sections
     button_frame = ttk.Frame(r, padding="10")
     button_frame.pack(side="top", fill="x")
-    query_frame = ttk.Frame(r, padding="10")
-    query_frame.pack(side="top", fill="x")
-    radio_frame = ttk.Frame(query_frame)
+    radio_frame = ttk.Frame(r, padding="10")
     radio_frame.pack()
     appointments_frame = ttk.Frame(r, padding="10")
     appointments_frame.pack()
