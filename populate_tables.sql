@@ -298,7 +298,7 @@ INSERT INTO medications (medical_history_id, medication)
 VALUES (4004, 'None');
 
 INSERT INTO medications (medical_history_id, medication)
-VALUES (4005, ' Antibiotics');
+VALUES (4005, 'Antibiotics');
 
 INSERT INTO medications (medical_history_id, medication)
 VALUES (4006, 'Whitening Gel');

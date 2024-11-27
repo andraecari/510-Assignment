@@ -5,13 +5,15 @@ from tkinter import ttk, Label, PhotoImage
 import datetime
 import config
 
+# Function to format datetime to only display the date
 def format_data(rows):
     for row in rows:
         for key, value in row.items():
             if isinstance(value, datetime.datetime):
-                row[key] = value.strftime('%Y-%m-%d')  # Format datetime to only display the date
+                row[key] = value.strftime('%Y-%m-%d')  
     return rows
 
+# Function to format SQL scripts for oracledb
 def read_sql(path):
     try:
         with open(path, "r") as file:
@@ -51,7 +53,7 @@ def execute_query():
     search = search_bar_var.get()
 
     tree_frame.pack_propagate(False)  # Prevent the frame from resizing with its contents
-    tree_frame.config(height=400)  # Explicitly set the height
+    # tree_frame.config(height=400)
 
     try:
         # Execute the query
@@ -111,11 +113,11 @@ def drop_tables():
         for command in sql_commands:
             cursor.execute(command)
         connection.commit()
-        messagebox.showinfo("Success", "All Tables have been dropped.")
+        messagebox.showinfo("Success", "All tables have been dropped.")
         print("All tables dropped successfully.")
     except Exception as e:
         if "ORA-00942: table or view does not exist" in str(e):
-            messagebox.showinfo("Ok", "You cannot Drop Tables that don't exist.")
+            messagebox.showinfo("Ok", "You cannot drop tables that don't exist.")
         print(f"Error dropping tables: {e}")
 
 # Function to create tables
@@ -126,7 +128,7 @@ def create_tables():
             cursor.execute(command)
         connection.commit()
         # Display success message
-        messagebox.showinfo("Success", "All Tables have been created.")
+        messagebox.showinfo("Success", "All tables have been created.")
         print("Tables created successfully.")
     except Exception as e:
         if "ORA-00955: name is already used by an existing object" in str(e):
@@ -145,6 +147,8 @@ def populate_tables():
     except Exception as e:
         if "ORA-00001: unique constraint" in str(e):
             messagebox.showinfo("Ok", "Data already exist.")
+        elif "ORA-00942: table or view does not exist" in str(e):
+            messagebox.showinfo("Ok", "There are no tables to populate. Please Create Tables.")
         print(f"Error creating tables: {e}")
 
 # Function to handle cleanup when exiting
@@ -175,52 +179,50 @@ def main():
     connection = oracledb.connect(user=username, password=password, dsn=dsn)
     cursor = connection.cursor()
 
-    # Create the main window
     r = tk.Tk()
     r.title("ToothWise")
 
     # Main Image
     logo = PhotoImage(file="toothwise.png")
 
-    # Header
+    # Frames
     header_frame = tk.Frame(r)
-    header_frame.pack(pady=20)  
+    header_frame.pack(pady=20, anchor="center")
+    button_frame = ttk.Frame(r, padding="10")
+    button_frame.pack(anchor="center")
+    radio_frame = ttk.Frame(r, padding="10")
+    radio_frame.pack(anchor="center")
+    query_frame = ttk.Frame(r, padding="10")
+    query_frame.pack(anchor="center")
+    tree_frame = ttk.Frame(r, padding="10", width=800, height=400)
+    tree_frame.pack(pady=10, fill="both", expand=True)
+
+    # Header
     logo_label = Label(header_frame, image=logo)
-    logo_label.grid(row=0, column=0, padx=10) 
+    logo_label.grid(row=0, column=0, padx=10)
     text_label = Label(header_frame, text="ToothWise", font=("Arial", 24))
     text_label.grid(row=0, column=1)
-
     # App Icon
     logo_label.image = logo
     r.iconphoto(True, logo)
 
-    # Different Frame Sections
-    button_frame = ttk.Frame(r, padding="10")
-    button_frame.pack(side="top", fill="x")
-    radio_frame = ttk.Frame(r, padding="10")
-    radio_frame.pack()
-    query_frame = ttk.Frame(r, padding="10")
-    query_frame.pack(side="top", fill="x")
-
-    create_button = ttk.Button(button_frame, text="Create Tables", command=create_tables)
-    create_button.pack(side="left", padx=5)
-
-    populate_button = ttk.Button(button_frame, text="Populate Tables", command=populate_tables)
-    populate_button.pack(side="left", padx=5)
-
-    drop_button = ttk.Button(button_frame, text="Drop Tables", command=drop_tables)
-    drop_button.pack(side="left", padx=5)
-
-    exit_button = ttk.Button(button_frame, text="Exit", command=on_exit)
-    exit_button.pack(side="left", padx=5)
+    # Main Buttons
+    ttk.Button(button_frame, text="Create Tables", command=create_tables).pack(side="left", padx=10)
+    ttk.Button(button_frame, text="Populate Tables", command=populate_tables).pack(side="left", padx=10)
+    ttk.Button(button_frame, text="Drop Tables", command=drop_tables).pack(side="left", padx=10)
+    ttk.Button(button_frame, text="Exit", command=on_exit).pack(side="left", padx=10)
 
     # Share variable for all radio buttons
     radio_var = tk.StringVar()
-    radio_var.set("Patients")  # Default selection
+    radio_var.set("Patients")
     radio_var.trace_add("write", lambda *args: update_query_string(radio_var, *args))
 
-    # Row One Radio Buttons
-    radio_options = ["Patients", "Employees", "Appointments", "Equipment", "Billing", "Medical History", "Inventory", "Medical Conditions", "Medications", "Patient's Appointments"]
+    # Radio Buttons
+    radio_options = [
+        "Patients", "Employees", "Appointments", "Equipment",
+        "Billing", "Medical History", "Inventory", "Medical Conditions",
+        "Medications", "Patient's Appointments"
+    ]
     for option in radio_options:
         ttk.Radiobutton(
             radio_frame,
@@ -229,18 +231,13 @@ def main():
             value=option,
         ).pack(side="left", padx=5)
 
+    # Search Bar
     search_bar_var = tk.StringVar()
+    ttk.Entry(query_frame, textvariable=search_bar_var, width=30).pack(side="left", padx=10)
 
-    search_bar = ttk.Entry(query_frame, textvariable=search_bar_var, width=30)
-    search_bar.pack(side="left", padx=5)
+    # Query Button
+    ttk.Button(query_frame, text="Query", command=execute_query).pack(side="left", padx=10)
 
-    ttk.Button(query_frame, text="Query", command=execute_query).pack(side="left", padx=5)
-
-    # Create a frame for the Treeview (QUERIES)
-    tree_frame = ttk.Frame(r, padding="10", width=800, height=400)  # Reserve space for Treeview
-    tree_frame.pack(side="top", fill="both", expand=True)
-
-    # Run the Tkinter main loop
     r.mainloop()
 
 if __name__ == "__main__":
