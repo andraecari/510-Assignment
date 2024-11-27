@@ -45,7 +45,6 @@ CREATE TABLE medical_conditions (
     medical_condition VARCHAR2(255) NOT NULL,
     CONSTRAINT pk_medical_conditions PRIMARY KEY (medical_history_id, medical_condition),
     CONSTRAINT fk_med_hist_id_med_cond FOREIGN KEY (medical_history_id) REFERENCES medical_history(medical_history_id)
-    
 );
 
 CREATE TABLE medications (
@@ -53,7 +52,6 @@ CREATE TABLE medications (
     medication VARCHAR2(255),
     CONSTRAINT pk_medications PRIMARY KEY (medical_history_id, medication),
     CONSTRAINT fk_med_hist_id_med FOREIGN KEY (medical_history_id) REFERENCES medical_history(medical_history_id)
-
 );
 
 CREATE TABLE patient_appointments (
@@ -62,7 +60,6 @@ CREATE TABLE patient_appointments (
     CONSTRAINT pk_patient_appointments PRIMARY KEY (medical_history_id, appointment_id),
     CONSTRAINT fk_med_hist_id_pat_apt FOREIGN KEY (medical_history_id) REFERENCES medical_history(medical_history_id),
     CONSTRAINT fk_apt_id_pat_apts FOREIGN KEY (appointment_id) REFERENCES appointments(appointment_id)
-
 );
 
 CREATE TABLE inventory (
