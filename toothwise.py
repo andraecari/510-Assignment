@@ -106,6 +106,23 @@ def execute_query():
             messagebox.showinfo("Ok", "Tables do not exist. Please click Create Tables.")
         print(f"Error executing query: {e}")
 
+def on_update():
+    update = update_var.get()
+    try:
+        if update != "":
+            cursor.execute(update)
+            connection.commit()
+            messagebox.showinfo("Ok", f"Successfully executed: {update}")
+        else:
+            messagebox.showinfo("Ok", "Command cannot be empty.")
+        update_var.set("")
+    except Exception as e:
+        if "ORA-00900: invalid SQL statement" in str(e) or "DPY-4010" in str(e):
+            messagebox.showinfo("Ok", "Invalid command.")
+        elif "ORA-00001:" in str(e):
+            messagebox.showinfo("Ok", "Record already exists.")
+        print(f"Error executing command: {e}")
+
 # Function to drop tables
 def drop_tables():
     try:
@@ -131,7 +148,7 @@ def create_tables():
         messagebox.showinfo("Success", "All tables have been created.")
         print("Tables created successfully.")
     except Exception as e:
-        if "ORA-00955: name is already used by an existing object" in str(e):
+        if "ORA-00955:" in str(e):
             messagebox.showinfo("Ok", "Tables already exist.")
         print(f"Error creating tables: {e}")
 
@@ -168,7 +185,7 @@ def on_exit():
         r.quit()
 
 def main():
-    global r, tree_frame, cursor, connection, query_string, search_bar_var
+    global r, tree_frame, cursor, connection, query_string, search_bar_var, update_var
     query_string = "SELECT * from patients"
 
     # Database connection details. Make a config.py file or hardcode these in.
@@ -233,10 +250,13 @@ def main():
 
     # Search Bar
     search_bar_var = tk.StringVar()
-    ttk.Entry(query_frame, textvariable=search_bar_var, width=30).pack(side="left", padx=10)
-
-    # Query Button
+    ttk.Entry(query_frame, textvariable=search_bar_var, width=18).pack(side="left", padx=10)
     ttk.Button(query_frame, text="Query", command=execute_query).pack(side="left", padx=10)
+
+    # Update Bar
+    update_var = tk.StringVar()
+    ttk.Entry(query_frame, textvariable=update_var, width=30).pack(side="left", padx=10)
+    ttk.Button(query_frame, text="Update", command=on_update).pack(side="left", padx=10)
 
     r.mainloop()
 
