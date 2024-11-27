@@ -30,7 +30,7 @@ An Efficient Dental Clinic Data and Appointment Management System.
    cd /path/to/directory
    ```
 
-2. Create a `config.py` file with the following contents.
+2. Create a `config.py` file in the same directory with the following contents:
    ```python
    USERNAME = 'USERNAME'
    DSN = 'oracle12c.cs.torontomu.ca:1521/orcl12c'
