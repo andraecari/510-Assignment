@@ -31,13 +31,10 @@ def update_query_string(radio_var, *args):
         "Billing": "SELECT * FROM billing",
         "Medical History": "SELECT * FROM medical_history",
         "Inventory": "SELECT * FROM inventory",
-        "Appointment #1": "SELECT * FROM patients",
-        "Appointment #2": "SELECT * FROM patients",
-        "Appointment #3": "SELECT * FROM patients",
-        "Medical History #1": "SELECT * FROM patients",
-        "Medical History #2": "SELECT * FROM patients",
-        "Medical History #3": "SELECT * FROM patients",
-        "Medical History #4": "SELECT * FROM patients",
+        "Equipment": "SELECT * FROM equipment",
+        "Medical Conditions": "SELECT * FROM medical_conditions",
+        "Medications": "SELECT * FROM medications",
+        "Patient's Appointments": "SELECT * FROM patient_appointments"
     }
     selection = radio_var.get()  # Get the currently selected value
     query_string = query_strings.get(selection, "")
@@ -224,8 +221,8 @@ def main():
     radio_var.set("Patients")  # Default selection
     radio_var.trace_add("write", lambda *args: update_query_string(radio_var, *args))
 
-    # Original Radio Buttons
-    radio_options = ["Patients", "Employees", "Appointments", "Billing", "Medical History", "Inventory"]
+    # Row One Radio Buttons
+    radio_options = ["Patients", "Employees", "Appointments", "Equipment", "Billing", "Medical History", "Inventory", "Medical Conditions", "Medications", "Patient's Appointments"]
     for option in radio_options:
         ttk.Radiobutton(
             radio_frame,
@@ -234,25 +231,27 @@ def main():
             value=option,
         ).pack(side="left", padx=5)
 
+
+
     # Appointments Normalized Section
-    ttk.Label(appointments_frame, text="Appointments Normalized", font=("Arial", 12)).pack(pady=5)
-    appointments_radio_frame = ttk.Frame(appointments_frame)
-    appointments_radio_frame.pack()
-    appointment_options = ["Appointment #1", "Appointment #2", "Appointment #3"]
-    for option in appointment_options:
-        ttk.Radiobutton(appointments_radio_frame, text=option, variable=radio_var, value=option).pack(
-            side="left", padx=5
-        )
+    # ttk.Label(appointments_frame, text="Appointments Normalized", font=("Arial", 12)).pack(pady=5)
+    # appointments_radio_frame = ttk.Frame(appointments_frame)
+    # appointments_radio_frame.pack()
+    # appointment_options = ["Equipment"]
+    # for option in appointment_options:
+    #     ttk.Radiobutton(appointments_radio_frame, text=option, variable=radio_var, value=option).pack(
+    #         side="left", padx=5
+    #     )
 
     # Medical History Normalized Section
-    ttk.Label(medical_history_frame, text="Medical History Normalized", font=("Arial", 12)).pack(pady=5)
-    medical_history_radio_frame = ttk.Frame(medical_history_frame)
-    medical_history_radio_frame.pack()
-    medical_history_options = ["Medical History #1", "Medical History #2", "Medical History #3", "Medical History #4"]
-    for option in medical_history_options:
-        ttk.Radiobutton(medical_history_radio_frame, text=option, variable=radio_var, value=option).pack(
-            side="left", padx=5
-        )
+    # ttk.Label(medical_history_frame, text="Medical History Normalized", font=("Arial", 12)).pack(pady=5)
+    # medical_history_radio_frame = ttk.Frame(medical_history_frame)
+    # medical_history_radio_frame.pack()
+    # medical_history_options = ["Medical Conditions", "Medications", "Patient's Appointments"]
+    # for option in medical_history_options:
+    #     ttk.Radiobutton(medical_history_radio_frame, text=option, variable=radio_var, value=option).pack(
+    #         side="left", padx=5
+    #     )
 
     # Query Button and Search Bar
     query_frame = ttk.Frame(medical_history_frame)
