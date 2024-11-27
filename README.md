@@ -25,7 +25,7 @@ An Efficient Dental Clinic Data and Appointment Management System.
 
 ## Running the Program
 
-1. Navigate to the directory containing the `dentaldbms.py` file:
+1. Navigate to the directory containing the `toothwise.py` file:
    ```bash
    cd /path/to/directory
    ```
