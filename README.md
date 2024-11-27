@@ -2,7 +2,7 @@
 An Efficient Dental Clinic Data and Appointment Management System.
 > By Vivian Fang and Andrae Cari
 
-![image](https://github.com/user-attachments/assets/e9549bf7-8af1-49ea-a9f1-e52faf97bed8)
+![image](https://github.com/user-attachments/assets/a85847c4-60d2-45d7-bb3b-4a34057f8d3d)
 ## Prerequisites
 
 1. **Python Version**:
